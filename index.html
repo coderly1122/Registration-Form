@@ -4,24 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Form</title>
+    <style>
+        body{
+            font-family:'Segoe UI' , Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh ;
+            margin: 0;
+        }
+        form
+        {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 420px ;
+        }
+        h1{
+            text-align: center;
+            color:blue ;
+            margin-bottom: 25px;
+        }
+        .input-group{
+        margin-bottom: 20px;
+        }
+        label{
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: blue;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"]{
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid black;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box ;
+            transition: all 0.2s;
+        }
+        input:focus{
+            border-color: black;
+            outline: none;
+            box-shadow: 0 0 0 2px rgb(39, 28, 28);
+        }
+        .gender-section{
+            margin: 20px 0;
+        }
+        .gender-options{
+            display: flex;
+            gap: 20px;
+            margin-top: 5px;
+            color: rgb(43, 11, 11);
+            font-size: 15px;
+        }
+        ,
+        .gender-options label{
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+
+        }
+        button{
+            width:100% ;
+            padding: 14px;
+            background-color: rgb(238, 18, 18);
+            color: #f4f7f6;
+            border: none;
+            border-radius: 8px 
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 10px;
+            
+        }
+        button:hover{
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <form action="https://github.com/coderly1122/Registration-Form.git">
         <h1>Registration Form</h1>
+        <div>
         <p>Name: <input type="text" name="name" id=""></p>
+        </div>
+        <div>
         <p>Email: <input type="email" name="email" id=""></p>
+        </div>
+        <div>
         <p>Password: <input type="password" name="password" id=""></p>
+        </div>
+        <div>
         <p>City: <input type="text" name="city" id=""></p>
+        </div>
+        <div class="options-group">
         <h3>Select Gender</h3>
         <p>Male <input type="radio" name="gender" id="male"> </p>
         <p>Female <input type="radio" name="gender" id=""></p>
         <p>Other <input type="radio" name="gender" id=""></p>
-        
+        </div>
+        <div>
         <p>Hobbies: </p>
        <p>Reading <input type="checkbox" name="hobby" id=""></p>
         <p>Sports <input type="checkbox" name="hobby" id=""></p>
          <p>Music <input type="checkbox" name="hobby" id=""></p>
           <p>Coding<input type="checkbox" name="hobby" id=""></p>
+          </div>
           <br>
           <button type="submit">Submit</button>
     </form>
