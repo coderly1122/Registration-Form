@@ -25,7 +25,7 @@
         }
         h1{
             text-align: center;
-            color:blue ;
+            color:rgb(126, 18, 4) ;
             margin-bottom: 25px;
         }
         .input-group{
@@ -63,7 +63,7 @@
             color: rgb(43, 11, 11);
             font-size: 15px;
         }
-        ,
+        
         .gender-options label{
             font-weight: normal;
             display: flex;
@@ -78,7 +78,7 @@
             background-color: rgb(238, 18, 18);
             color: #f4f7f6;
             border: none;
-            border-radius: 8px 
+            border-radius: 8px ;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -89,38 +89,100 @@
         button:hover{
             background-color: #0056b3;
         }
+        .error-msg{
+            color:red;
+            font-size: small;
+            margin-top: 5px;
+            display: block;
+        }
     </style>
+    <script>
+        function submitForm()
+        {
+            let errorSpans = document.getElementsByClassName("error-msg");
+            for (let span of errorSpans) {
+                span.innerHTML = "";}
+            let name= document.getElementById("name").value;
+            let email= document.getElementById("email").value;
+            let password= document.getElementById("password").value;
+            let city= document.getElementById("city").value;
+            let gender = document.querySelector('input[name="gender"]:checked');
+            let hobbies = document.querySelectorAll('input[name="hobby"]:checked');
+            let isvalid=true;
+          if(name==""){
+            document.getElementById("nameError").innerHTML ="Name is required";
+            isvalid=false;
+          }
+          if(!email.includes("@")){
+            document.getElementById("emailError").innerHTML ="Enter a valid email";
+            isvalid=false;
+          }
+          if(password.length < 6){
+            document.getElementById("passwordError").innerHTML ="Password must be atleast 6 characters";
+            isvalid=false;
+        }
+          if(city=="default"){
+            document.getElementById("cityError").innerHTML ="Select a city";
+             isvalid=false;
+          }
+          if(!gender){
+            document.getElementById("genderError").innerHTML ="select a gender";
+             isvalid=false;
+          }
+          if(hobbies.length==0){
+            document.getElementById("hobbyError").innerHTML ="select atleast one hobby";
+             isvalid=false;
+            }
+            if (isvalid){
+                alert("Form submitted successfully!");
+                
+            }
+            return isvalid;
+            }
+    </script>
 </head>
 <body>
-    <form action="https://github.com/coderly1122/Registration-Form.git">
+    <form action="#" method="post" onsubmit="return submitForm()">
         <h1>Registration Form</h1>
         <div>
-        <p>Name: <input type="text" name="name" id=""></p>
+        <p>Name: <input type="text" name="name" id="name"></p>
+        <span id="nameError" class="error-msg"> </span>
         </div>
         <div>
-        <p>Email: <input type="email" name="email" id=""></p>
+        <p>Email: <input type="email" name="email" id="email"></p>
+        <span id="emailError" class="error-msg"></span>
         </div>
         <div>
-        <p>Password: <input type="password" name="password" id=""></p>
+        <p>Password: <input type="password" name="password" id="password"></p>
+        <span id="passwordError" class="error-msg"></span>
         </div>
         <div>
-        <p>City: <input type="text" name="city" id=""></p>
+        <p>City: <select name="city" id="city">
+            <option value="default">--  Choose City --</option>
+                <option value="new-york">New York</option>
+                <option value="london">London</option>
+                <option value="tokyo">Tokyo</option>
+            </select>
+        </p>
+        <span id="cityError" class="error-msg"></span>
         </div>
         <div class="options-group">
         <h3>Select Gender</h3>
-        <p>Male <input type="radio" name="gender" id="male"> </p>
-        <p>Female <input type="radio" name="gender" id=""></p>
-        <p>Other <input type="radio" name="gender" id=""></p>
+        <p>Male <input type="radio" name="gender" id="male" value="male"> </p>
+        <p>Female <input type="radio" name="gender" id="Female" value="Female"></p>
+        <p>Other <input type="radio" name="gender" id="Other" value="Other"></p>
+        <span id="genderError" class="error-msg"></span>
         </div>
         <div>
         <p>Hobbies: </p>
-       <p>Reading <input type="checkbox" name="hobby" id=""></p>
-        <p>Sports <input type="checkbox" name="hobby" id=""></p>
-         <p>Music <input type="checkbox" name="hobby" id=""></p>
-          <p>Coding<input type="checkbox" name="hobby" id=""></p>
+       <p>Reading <input type="checkbox" name="hobby" id="" value="Reading"></p>
+        <p>Sports <input type="checkbox" name="hobby" id="" value="Sports"></p>
+         <p>Music <input type="checkbox" name="hobby" id="" value="Music"></p>
+          <p>Coding<input type="checkbox" name="hobby" id="" value="Coding"></p>
+          <span id="hobbyError" class="error-msg"></span>
           </div>
           <br>
-          <button type="submit">Submit</button>
+          <input id="submit" type="submit">
     </form>
     
 </body>
