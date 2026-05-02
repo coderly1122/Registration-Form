@@ -58,18 +58,25 @@
             font-weight: bold;
             cursor: pointer;
             margin-top: 15px;
+            transition: 0.3s;
+        }
+
+        /* Faded state when disabled */
+        button:disabled {
+            background-color: #444;
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .error-msg {
             color: #b30000;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             display: block;
             min-height: 18px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
         }
 
-        /* Success Message Container - Hidden by default */
         #success-container {
             display: none;
             background: white;
@@ -77,75 +84,8 @@
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            animation: popIn 0.5s ease;
-        }
-
-        #success-container h2 {
-            color: #2e7d32;
-            margin-bottom: 10px;
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
         }
     </style>
-    <script>
-        function submitForm(event) {
-            event.preventDefault(); // Stop page reload
-
-            // 1. Reset Errors
-            let errorSpans = document.getElementsByClassName("error-msg");
-            for (let span of errorSpans) { span.innerHTML = ""; }
-
-            // 2. Get values
-            let name = document.getElementById("name").value;
-            let email = document.getElementById("email").value;
-            let password = document.getElementById("password").value;
-            let city = document.getElementById("city").value;
-            let gender = document.querySelector('input[name="gender"]:checked');
-            let hobbies = document.querySelectorAll('input[name="hobby"]:checked');
-            
-            let isvalid = true;
-
-            // 3. Validation logic
-            if (name.trim() === "") {
-                document.getElementById("nameError").innerHTML = "Name is required";
-                isvalid = false;
-            }
-            if (!email.includes("@")) {
-                document.getElementById("emailError").innerHTML = "Enter a valid email";
-                isvalid = false;
-            }
-            if (password.length < 6) {
-                document.getElementById("passwordError").innerHTML = "Min 6 characters required";
-                isvalid = false;
-            }
-            if (city === "default") {
-                document.getElementById("cityError").innerHTML = "Select a city";
-                isvalid = false;
-            }
-            if (!gender) {
-                document.getElementById("genderError").innerHTML = "Select a gender";
-                isvalid = false;
-            }
-            if (hobbies.length === 0) {
-                document.getElementById("hobbyError").innerHTML = "Select at least one hobby";
-                isvalid = false;
-            }
-
-            // 4. Final Action
-            if (isvalid) {
-                // HIDE the form
-                document.getElementById("registrationForm").style.display = "none";
-                
-                // SHOW the success container
-                document.getElementById("success-container").style.display = "block";
-            }
-            
-            return false;
-        }
-    </script>
 </head>
 <body>
 
@@ -153,19 +93,19 @@
         <h1>Registration Form</h1>
         
         <label>Name:</label>
-        <input type="text" id="name">
+        <input type="text" id="name" placeholder="3 characters" oninput="validateForm()">
         <span id="nameError" class="error-msg"></span>
 
         <label>Email:</label>
-        <input type="email" id="email">
+        <input type="email" id="email" placeholder="example@mail.com" oninput="validateForm()">
         <span id="emailError" class="error-msg"></span>
 
         <label>Password:</label>
-        <input type="password" id="password">
+        <input type="password" id="password" placeholder="e.g. abc1234!" oninput="validateForm()">
         <span id="passwordError" class="error-msg"></span>
 
         <label>City:</label>
-        <select id="city">
+        <select id="city" onchange="validateForm()">
             <option value="default">-- Choose City --</option>
             <option value="new-york">New York</option>
             <option value="london">London</option>
@@ -173,26 +113,94 @@
         <span id="cityError" class="error-msg"></span>
 
         <p><strong>Gender:</strong></p>
-        <input type="radio" name="gender" value="male"> Male <br>
-        <input type="radio" name="gender" value="female"> Female <br>
-        <input type="radio" name="gender" value="female"> other <br>
+        <input type="radio" name="gender" value="male" onchange="validateForm()"> Male 
+        <input type="radio" name="gender" value="female" onchange="validateForm()"> Female 
         <span id="genderError" class="error-msg"></span>
 
         <p><strong>Hobbies:</strong></p>
-        <input type="checkbox" name="hobby" value="coding"> Coding <br>
-        <input type="checkbox" name="hobby" value="music"> Music <br>
-        <input type="checkbox" name="hobby" value="sports"> sports <br>
-        <input type="checkbox" name="hobby" value="reading"> reading <br>
+        <input type="checkbox" name="hobby" value="coding" onchange="validateForm()"> Coding 
+        <input type="checkbox" name="hobby" value="music" onchange="validateForm()"> Music 
         <span id="hobbyError" class="error-msg"></span>
 
-        <button type="submit">Submit Form</button>
+        <button type="submit" id="submitBtn" disabled>Submit Form</button>
     </form>
 
     <div id="success-container">
         <h2>Success! ✅</h2>
         <p>Your form has been submitted successfully.</p>
-        <button onclick="window.location.reload()" style="background: #033f2b; margin-top: 10px;">Go Back</button>
+        <button onclick="window.location.reload()" style="background: #033f2b;">Go Back</button>
     </div>
 
+    <script>
+        function validateForm() {
+            // Get Elements
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const city = document.getElementById("city").value;
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const hobbies = document.querySelectorAll('input[name="hobby"]:checked');
+            const submitBtn = document.getElementById("submitBtn");
+
+            // Flags
+            let isNameValid = false;
+            let isEmailValid = false;
+            let isPassValid = false;
+
+            // 1. Name Validation (Exact 3, Handle Empty)
+            if (name.length === 0) {
+                document.getElementById("nameError").innerText = "Name is required";
+            } else if (name.length !== 3) {
+                document.getElementById("nameError").innerText = "Name must be exactly 3 characters";
+            } else {
+                document.getElementById("nameError").innerText = "";
+                isNameValid = true;
+            }
+
+            // 2. Email Validation (@ and .com)
+            if (email.includes("@") && email.endsWith(".com")) {
+                document.getElementById("emailError").innerText = "";
+                isEmailValid = true;
+            } else {
+                document.getElementById("emailError").innerText = "Must contain @ and end with .com";
+            }
+
+            // 3. Password Validation (3 alpha, 4 int, 1 special)
+            const alphas = (password.match(/[a-zA-Z]/g) || []).length;
+            const ints = (password.match(/[0-9]/g) || []).length;
+            const specials = (password.match(/[^a-zA-Z0-9]/g) || []).length;
+
+            if (password.length === 8 && alphas === 3 && ints === 4 && specials === 1) {
+                document.getElementById("passwordError").innerText = "";
+                isPassValid = true;
+            } else {
+                document.getElementById("passwordError").innerText = "Required: 3 letters, 4 numbers, 1 special (8 total)";
+            }
+
+            // 4. Other Fields
+            const isCityValid = city !== "default";
+            const isGenderValid = !!gender;
+            const isHobbyValid = hobbies.length > 0;
+
+            // Clear non-required specific errors for display clean-up
+            document.getElementById("cityError").innerText = isCityValid ? "" : "Please select a city";
+            document.getElementById("genderError").innerText = isGenderValid ? "" : "Please select gender";
+            document.getElementById("hobbyError").innerText = isHobbyValid ? "" : "Select at least one hobby";
+
+            // Toggle Submit Button
+            if (isNameValid && isEmailValid && isPassValid && isCityValid && isGenderValid && isHobbyValid) {
+                submitBtn.disabled = false;
+            } else {
+                submitBtn.disabled = true;
+            }
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+            document.getElementById("registrationForm").style.display = "none";
+            document.getElementById("success-container").style.display = "block";
+            return false;
+        }
+    </script>
 </body>
 </html>
